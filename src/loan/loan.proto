@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+package loan;
+
+service LoanService {
+  rpc FindLoanById (LoanById) returns (Loan) {}
+  rpc FindLoansByYear (DefaultedLoanByYear) returns (Loans) {}
+  rpc FindLoansDistributionByDateRange (LoanDistributionByDateRange) returns (LoansDistribution) {}
+  rpc FindLoansWithCustomFilter (CustomFilter) returns (Loans) {}
+}
+
+message LoanById {
+  string id = 1;
+}
+
+message DefaultedLoanByYear {
+  int32 year = 1;
+  optional string currency = 3;
+}
+
+message LoanDistributionByDateRange {
+  string startDate = 1;
+  string endDate = 2;
+}
+
+message LoansDistribution {
+  int32 defaultedLoansCount = 1;
+  int32 goodLoansCount = 2;
+  int32 allLoansCount = 3;
+}
+
+message CustomFilter {
+  FilterType type = 1;
+  string value = 2;
+}
+
+enum FilterType {
+  JOB = 0;
+  AGE = 1;
+  EDUCATION = 2;
+  MARITAL_STATUS = 3;
+}
+
+enum MaritalStatus {
+  MARRIED = 0;
+  SINGLE = 1;
+  DIVORCED = 2;
+  WIDOWED = 3;
+}
+
+enum Education {
+  PRIMARY = 0;
+  SECONDARY = 1;
+  TERTIARY = 2;
+  UNKNOWN = 3;
+}
+
+message Loan {
+  string id = 1;
+  string date = 2;
+  bool isDefault = 3;
+  int32 age = 4;
+  string job = 5;
+  MaritalStatus maritalStatus = 6;
+  Education education = 7;
+  optional int64 balance = 8;
+  optional string currency = 9;
+}
+
+message Loans {
+  repeated Loan loans = 1;
+}
+
